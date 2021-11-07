@@ -1,8 +1,8 @@
 from django.db import models
+from django.core.validators import MinLengthValidator, RegexValidator
 
 
 # Create your models here.
-
 class Pais(models.Model):
     nombre = models.CharField(max_length=50)
     codigo = models.CharField(max_length=3)
@@ -17,7 +17,14 @@ class Pais(models.Model):
 
 
 class Curso(models.Model):
-    nombre = models.CharField(max_length=50)
+    nombre = models.CharField(max_length=50,
+                              validators=[
+                                  MinLengthValidator(6),
+                                  RegexValidator(
+                                      regex='^[a-zA-Z0-9]*$',
+                                      message='nomre must be Alphanumeric',
+                                  ),
+                              ])
     descripcion = models.TextField(verbose_name='descripción')
     foto = models.ImageField(verbose_name='imagen', upload_to='cursos/fotos')
     activo = models.BooleanField(default=True)
